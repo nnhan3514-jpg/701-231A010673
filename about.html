@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phần Lý thuyết - Đề thi Kết thúc Học phần Lập trình Web</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>PHẦN LÝ THUYẾT (40 ĐIỂM)</h1>
+        <p>Giải đáp chi tiết các câu hỏi lý thuyết Đề số 1 | Sinh viên: Nguyễn Triệu Nhân - MSSV: 231A010673</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Trang chủ (Đề Số 1)</a>
+        <a href="about.html" class="active">Trả lời Lý thuyết</a>
+        <a href="baitap23.html">Bài tập 23</a>
+        <a href="baitap22.html">Bài tập 22</a>
+        <a href="contact.html">Thông tin Điểm danh</a>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Câu 1 -->
+        <div class="card">
+            <h2>Câu 1 (10 điểm): position: absolute vs position: relative</h2>
+            <h3>1. Sự khác biệt cốt lõi:</h3>
+            <ul>
+                <li><strong><code>position: relative</code>:</strong> Định vị tương đối so với vị trí mặc định ban đầu của chính nó trong luồng tài liệu (normal flow). Phần tử vẫn chiếm không gian ban đầu của nó, các phần tử xung quanh không bị dịch chuyển lấp chỗ trống. Nó thường được dùng làm "khung chứa mẹ" (containing block) cho các phần tử con tuyệt đối bên trong.</li>
+                <li><strong><code>position: absolute</code>:</strong> Định vị tuyệt đối tách hoàn toàn khỏi luồng tài liệu thông thường. Nó được định vị so với phần tử cha gần nhất có thuộc tính position khác <code>static</code> (như <code>relative</code>, <code>absolute</code>, <code>fixed</code>). Nếu không có, nó sẽ căn cứ vào thẻ gốc <code>&lt;html&gt;</code>. Không gian ban đầu của nó bị xóa bỏ và các phần tử khác sẽ lấp vào chỗ trống.</li>
+            </ul>
+
+            <h3>2. Tình huống sử dụng tạo layout responsive:</h3>
+            <ul>
+                <li><strong>Relative:</strong> Dùng cho khung thẻ bao bọc (wrapper container) của một card sản phẩm hoặc banner, giúp định hình không gian lưới mà không làm hỏng cấu trúc layout chung.</li>
+                <li><strong>Absolute:</strong> Dùng để đặt các huy hiệu (badge như "Giảm giá 50%", "Hot", "New") đè lên góc của ảnh sản phẩm hoặc nút "Đóng" (Close button) ở góc trên bên phải của Modal popup.</li>
+            </ul>
+
+            <h3>3. Ảnh hưởng khi deploy website lên hosting:</h3>
+            <p>Khi deploy lên các nền tảng hosting tĩnh (như GitHub Pages hay Netlify), việc sử dụng <code>position: absolute</code> dựa trên các giá trị cứng (pixels tuyệt đối như <code>top: 150px; left: 300px;</code>) rất dễ gây vỡ giao diện (overflow) khi hiển thị trên màn hình di động nhỏ (responsive mobile). Giải pháp tối ưu là kết hợp đơn vị phần trăm (%), Flexbox, hoặc Grid để đảm bảo tính tương thích cao trên mọi thiết bị.</p>
+        </div>
+
+        <!-- Câu 2 -->
+        <div class="card">
+            <h2>Câu 2 (10 điểm): Quy trình Domain & Hosting, Vai trò DNS & Deploy</h2>
+            <h3>1. Quy trình đăng ký domain và cấu hình hosting cho website JavaScript:</h3>
+            <ul>
+                <li><strong>Bước 1 (Mua Domain):</strong> Đăng ký tên miền tại nhà cung cấp (Namecheap, GoDaddy, P.A Việt Nam...) với tên miền định danh (ví dụ: <code>nhannt-vhu.io.vn</code>).</li>
+                <li><strong>Bước 2 (Chuẩn bị Source Code):</strong> Hoàn thiện mã nguồn tĩnh website bao gồm HTML, CSS, JavaScript thuần (có thể lưu trữ dữ liệu client-side qua LocalStorage hoặc tích hợp API bên ngoài).</li>
+                <li><strong>Bước 3 (Chọn Hosting/PaaS):</strong> Đưa code lên nền tảng hosting phù hợp cho ứng dụng tĩnh/JS như GitHub Pages, Netlify hoặc Vercel.</li>
+                <li><strong>Bước 4 (Cấu hình DNS trỏ về Hosting):</strong> Đăng nhập trang quản lý tên miền, cấu hình các bản ghi DNS (như bản ghi CNAME hoặc A Record) để liên kết tên miền riêng với URL server hosting cung cấp.</li>
+            </ul>
+
+            <h3>2. Vai trò của DNS (Domain Name System):</h3>
+            <p>DNS đóng vai trò như "danh bạ internet", dịch tên miền dễ đọc (ví dụ: <code>nhannt-vhu.io.vn</code>) thành địa chỉ IP máy chủ số học (ví dụ: <code>185.199.108.153</code>) để trình duyệt máy khách có thể tìm và kết nối chính xác tới website.</p>
+
+            <h3>3. Đề xuất 2 công cụ deploy không cần server riêng:</h3>
+            <ul>
+                <li><strong>GitHub Pages:</strong> Miễn phí, tích hợp trực tiếp với kho lưu trữ Git, tự động build và deploy website tĩnh qua mỗi lần <code>git push</code>.</li>
+                <li><strong>Netlify:</strong> Hỗ trợ kéo-thả (drag-and-drop) thư mục code lên để deploy lập tức, hỗ trợ tự động cấu hình chứng chỉ SSL miễn phí (HTTPS) và custom domain cực nhanh.</li>
+            </ul>
+
+            <h3>4. Rủi ro bảo mật nếu không cấu hình đúng:</h3>
+            <p>Không cấu hình HTTPS (chứng chỉ SSL) dẫn đến dữ liệu truyền tải giữa người dùng và website bị nghe lén (Man-in-the-Middle Attack). Cấu hình bản ghi DNS sai (ví dụ phân quyền nhầm CNAME takeover) có thể khiến hacker chiếm quyền kiểm soát tên miền trỏ về website độc hại.</p>
+        </div>
+
+        <!-- Câu 3 -->
+        <div class="card">
+            <h2>Câu 3 (10 điểm): So sánh let, const và var trong JavaScript</h2>
+            <h3>1. Bảng so sánh Scope và Hoisting:</h3>
+            <ul>
+                <li><strong><code>var</code>:</strong> Function scope (hoặc Global scope nếu khai báo ngoài hàm). Có hỗ trợ hoisting nhưng khởi tạo giá trị là <code>undefined</code>, dễ gây lỗi logic ẩn. Cho phép khai báo lại trùng tên.</li>
+                <li><strong><code>let</code>:</strong> Block scope (phạm vi trong cặp ngoặc nhọn <code>{}</code>). Có hoisting nhưng nằm trong <em>Temporal Dead Zone (TDZ)</em> nên gọi trước khi khai báo sẽ văng lỗi <code>ReferenceError</code>. Không cho phép khai báo lại cùng một scope.</li>
+                <li><strong><code>const</code>:</strong> Block scope giống <code>let</code>. Bắt buộc phải gán giá trị ngay khi khai báo và không thể gán lại giá trị mới (immutable binding, tuy nhiên với object/array vẫn thay đổi được thuộc tính bên trong).</li>
+            </ul>
+
+            <h3>2. Ví dụ lỗi thường gặp và cách Debug:</h3>
+            <pre style="background: #f1f2f6; padding: 1rem; border-radius: 4px; overflow-x: auto;">
+// Lỗi TDZ với let hoặc gán lại const
+try {
+    console.log(score); // Lỗi ReferenceError: Cannot access 'score' before initialization
+    let score = 100;
+} catch (err) {
+    console.error(err.message);
+}
+            </pre>
+            <p><strong>Cách Debug bằng Chrome DevTools:</strong> Nhấn <code>F12</code> hoặc chuột phải chọn <em>Inspect</em>, mở tab <strong>Sources</strong>, đặt các điểm dừng (Breakpoints) tại dòng code nghi vấn, sau đó quan sát khung <strong>Scope</strong> (Local, Closure, Global) để theo dõi trạng thái biến hoặc gõ trực tiếp biểu thức vào tab <strong>Console</strong> để kiểm tra.</p>
+        </div>
+
+        <!-- Câu 4 -->
+        <div class="card">
+            <h2>Câu 4 (10 điểm): Event Delegation trong JavaScript</h2>
+            <h3>1. Khái niệm Event Delegation (Ủy quyền sự kiện):</h3>
+            <p>Event Delegation là kỹ thuật tận dụng tính năng <strong>Event Bubbling</strong> (nổi bọt sự kiện). Thay vì gắn trực tiếp một sự kiện lắng nghe (như <code>addEventListener</code>) lên từng phần tử con riêng lẻ, ta gắn một sự kiện duy nhất lên phần tử cha chung của chúng. Khi sự kiện xảy ra ở phần tử con, nó sẽ nổi bọt lên phần tử cha và phần tử cha sẽ kiểm tra <code>event.target</code> để xử lý phù hợp.</p>
+
+            <h3>2. Ứng dụng trên danh sách động (Dynamic List):</h3>
+            <pre style="background: #f1f2f6; padding: 1rem; border-radius: 4px; overflow-x: auto;">
+// Ví dụ xử lý click trên danh sách thêm mới động
+const ulList = document.querySelector('#dynamicList');
+ulList.addEventListener('click', function(e) {
+    if (e.target && e.target.nodeName === 'LI') {
+        alert('Bạn đã click vào mục: ' + e.target.textContent);
+    }
+});
+            </pre>
+
+            <h3>3. Lợi ích tích hợp với HTML/CSS tối ưu hiệu suất:</h3>
+            <ul>
+                <li>Giảm thiểu số lượng bộ lắng nghe sự kiện (event listeners) gắn trên DOM, tiết kiệm đáng kể bộ nhớ RAM của trình duyệt khi danh sách có hàng ngàn phần tử.</li>
+                <li>Tự động hoạt động hiệu quả với các phần tử con mới được thêm vào động sau này mà không cần gọi lại hàm gán sự kiện thủ công.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Nguyễn Triệu Nhân | MSSV: 231A010673 | Trường Đại học Văn Hiến</p>
+    </footer>
+
+</body>
+</html>

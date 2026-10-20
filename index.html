@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề thi Kết thúc Học phần Lập trình Web - Đề Số 1</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1>ĐỀ THI KẾT THÚC HỌC PHẦN “LẬP TRÌNH WEB” - ĐỀ SỐ 1</h1>
+        <p>Sinh viên: Nguyễn Triệu Nhân | MSSV: 231A010673 | Trường Đại học Văn Hiến</p>
+    </header>
+
+    <nav>
+        <a href="index.html" class="active">Trang chủ (Đề Số 1)</a>
+        <a href="about.html">Trả lời Lý thuyết</a>
+        <a href="baitap23.html">Bài tập 23</a>
+        <a href="baitap22.html">Bài tập 22</a>
+        <a href="contact.html">Thông tin Điểm danh</a>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Giới thiệu đề thi -->
+        <div class="card">
+            <h2>Thông tin Kỳ thi & Cấu trúc</h2>
+            <p><strong>Học phần:</strong> Lập trình Web | <strong>Đề số:</strong> 01 | <strong>Thời gian làm bài:</strong> 150 phút</p>
+            <p><strong>Hình thức:</strong> Mở (cho phép sử dụng máy tính, điện thoại di động, tài liệu tham khảo).</p>
+            <p><strong>Cấu trúc đề thi:</strong></p>
+            <ul>
+                <li><strong>Phần Lý thuyết (40 điểm):</strong> Trả lời các câu hỏi về HTML, CSS, JavaScript, công cụ hỗ trợ, Domain & Hosting. (Xem chi tiết tại <a href="about.html">Trang Lý thuyết</a>).</li>
+                <li><strong>Phần Bài tập thực hành (60 điểm):</strong> Viết code HTML, CSS, JavaScript hiển thị ngay bên dưới, thực hiện đầy đủ 3 bài tập theo yêu cầu đề bài.</li>
+            </ul>
+        </div>
+
+        <!-- PHẦN THỰC HÀNH 1: TÌM KIẾM SẢN PHẨM -->
+        <div class="card">
+            <h2>Phần 1: Hiển thị và Tìm kiếm Sản phẩm (20 điểm)</h2>
+            <p>Nhập tên sản phẩm để tìm kiếm (hỗ trợ không phân biệt hoa thường, chống XSS injection):</p>
+            <input type="text" id="productSearch" class="search-box" placeholder="Nhập tên sản phẩm cần tìm (ví dụ: Jinhsi, Iuno, Figure, Artbook)...">
+            
+            <div id="productGrid" class="product-grid">
+                <!-- Danh sách sản phẩm render bằng JS -->
+            </div>
+            
+            <div style="margin-top: 1.5rem; font-size: 0.95rem; color: #555;">
+                <strong>Giải thích logic tư duy:</strong> Sử dụng mảng JavaScript lưu danh sách đối tượng sản phẩm. Lắng nghe sự kiện <code>input</code> trên ô tìm kiếm, sử dụng phương thức <code>filter()</code> kết hợp <code>toLowerCase()</code> để lọc chính xác không phân biệt hoa thường. Xây dựng hàm <code>escapeHTML()</code> để lọc bỏ các ký tự đặc biệt nhằm ngăn chặn lỗi tấn công XSS Injection trước khi render ra DOM.
+            </div>
+        </div>
+
+        <!-- PHẦN THỰC HÀNH 2: FORM ĐĂNG KÝ VÀ LOCALSTORAGE -->
+        <div class="card">
+            <h2>Phần 2: Form Đăng ký Người dùng & LocalStorage (20 điểm)</h2>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="regName">Họ và Tên:</label>
+                    <input type="text" id="regName" placeholder="Nhập họ tên đầy đủ">
+                    <div id="errorName" class="form-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email:</label>
+                    <input type="email" id="regEmail" placeholder="example@domain.com">
+                    <div id="errorEmail" class="form-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword">Mật khẩu:</label>
+                    <input type="password" id="regPassword" placeholder="Ít nhất 8 ký tự, có chữ hoa, chữ thường, số">
+                    <div id="errorPassword" class="form-error"></div>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="regAgree">
+                    <label for="regAgree" style="margin-bottom:0;">Tôi đồng ý với các điều khoản và dịch vụ</label>
+                </div>
+                <div id="errorAgree" class="form-error"></div>
+
+                <button type="submit" class="btn-submit">Đăng ký ngay</button>
+            </form>
+
+            <div id="formAlert" class="success-alert" style="display: none;"></div>
+
+            <div style="margin-top: 1.5rem; font-size: 0.95rem; color: #555;">
+                <strong>Giải thích logic tư duy:</strong> Sự kiện <code>submit</code> được bắt và ngăn chặn hành vi mặc định (<code>e.preventDefault()</code>). Dữ liệu được kiểm tra bằng Regular Expression (Regex) cho email và độ phức tạp mật khẩu. Khi dữ liệu hợp lệ, thông tin được đóng gói và lưu trữ cục bộ bằng <code>localStorage.setItem()</code> (có mã hóa cơ bản password để mô phỏng bảo mật dữ liệu cục bộ).
+            </div>
+        </div>
+
+        <!-- PHẦN THỰC HÀNH 3: ĐỒNG HỒ ĐẾM NGƯỢC -->
+        <div class="card">
+            <h2>Phần 3: Đồng hồ Đếm ngược (Countdown Timer - 20 điểm)</h2>
+            <div id="timerDisplay" class="timer-display">10:00</div>
+            <div class="timer-controls">
+                <button id="startTimer">Bắt đầu đếm ngược</button>
+                <button id="resetTimer">Làm mới / Đặt lại</button>
+            </div>
+
+            <div style="margin-top: 1.5rem; font-size: 0.95rem; color: #555;">
+                <strong>Giải thích logic tư duy:</strong> Sử dụng hàm <code>setInterval()</code> để đếm lùi mỗi giây. Để tránh lỗi <em>memory leak</em> (rò rỉ bộ nhớ), luôn gọi <code>clearInterval()</code> trước khi khởi tạo một interval mới. Khi thời gian đếm ngược dưới 1 phút (60 giây), CSS Keyframes Animation được kích hoạt tạo hiệu ứng nhấp nháy cảnh báo. Hết thời gian, modal thông báo tự động xuất hiện.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Thông báo Hết giờ -->
+    <div id="timeoutModal" class="modal">
+        <div class="modal-content">
+            <h3>Hết giờ làm bài!</h3>
+            <p>Thời gian đếm ngược 10 phút đã kết thúc.</p>
+            <button id="closeModal">Đóng thông báo</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Nguyễn Triệu Nhân | MSSV: 231A010673 | Trường Đại học Văn Hiến</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

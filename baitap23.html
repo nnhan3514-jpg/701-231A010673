@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập 23 - Web có hiệu ứng Javascript - Đèn Kéo Quân</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* 3D Carousel Perspective */
+        .scene {
+            perspective: 1200px;
+            width: 100%;
+            height: 420px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .carousel {
+            width: 220px;
+            height: 320px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .carousel__face {
+            position: absolute;
+            width: 200px;
+            height: 300px;
+            left: 10px;
+            top: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            backface-visibility: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .carousel__face:hover {
+            border-color: #6366f1;
+            transform: scale(1.03);
+        }
+        .carousel__face img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+        }
+        /* Lantern Top/Bottom Roof Styling */
+        .lantern-roof {
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 120px solid transparent;
+            border-right: 120px solid transparent;
+            border-bottom: 50px solid #4f46e5;
+            filter: drop-shadow(0 -4px 6px rgba(0,0,0,0.15));
+        }
+        .lantern-base {
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            height: 40px;
+            background: #4f46e5;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-slate-100 min-h-full flex flex-col">
+
+    <!-- Navigation Bar -->
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('home')">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-cube text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">Bài Tập 23</h1>
+                    <p class="text-xs text-slate-400">Đèn Kéo Quân & Hiệu Ứng JS</p>
+                </div>
+            </div>
+            <nav class="flex items-center space-x-2 sm:space-x-4">
+                <button onclick="switchView('home')" id="navHomeBtn" class="px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30">
+                    <i class="fa-solid fa-house mr-1.5"></i> Trang Chủ
+                </button>
+                <button onclick="switchView('lantern')" id="navLanternBtn" class="px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-fire-flame-curved mr-1.5"></i> Đèn Kéo Quân
+                </button>
+                <button onclick="switchView('assignment22')" id="navB22Btn" class="px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-folder-open mr-1.5"></i> Bài Tập 22
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- VIEW 1: HOME -->
+        <div id="homeView" class="space-y-8">
+            <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-6 sm:p-10 shadow-xl backdrop-blur-sm relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-10 -top-10 w-60 h-60 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-4 text-center md:text-left">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            <i class="fa-solid fa-graduation-cap mr-1.5"></i> Lập Trình Web - Trường Đại học Văn Hiến
+                        </span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Bài Tập 23 - Web Có Hiệu Ứng JS</h2>
+                        <p class="text-slate-300 max-w-2xl text-sm sm:text-base">
+                            Trang chủ quản lý bài tập tích hợp hiệu ứng JavaScript tương tác 3D (Đèn Kéo Quân) sử dụng thư mục ảnh cục bộ và liên kết bài tập 22.
+                        </p>
+                        <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-4 text-sm">
+                            <div class="bg-slate-900/60 px-4 py-2 rounded-xl border border-slate-700">
+                                <span class="text-slate-400 block text-xs">Họ và tên:</span>
+                                <span class="font-bold text-slate-100">Nguyễn Triệu Nhân</span>
+                            </div>
+                            <div class="bg-slate-900/60 px-4 py-2 rounded-xl border border-slate-700">
+                                <span class="text-slate-400 block text-xs">Mã Sinh Viên:</span>
+                                <span class="font-bold text-indigo-400 font-mono text-base">231A010673</span>
+                            </div>
+                            <div class="bg-slate-900/60 px-4 py-2 rounded-xl border border-slate-700">
+                                <span class="text-slate-400 block text-xs">Lớp:</span>
+                                <span class="font-bold text-slate-100">261INT440701</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button onclick="switchView('lantern')" class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 hover:opacity-95 transition-all transform hover:-translate-y-0.5 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                            <span>Xem Đèn Kéo Quân</span>
+                        </button>
+                        <button onclick="switchView('assignment22')" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-xl transition-all flex items-center justify-center space-x-2 border border-slate-600">
+                            <i class="fa-solid fa-link"></i>
+                            <span>Bài Tập 22</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Access Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div onclick="switchView('lantern')" class="group bg-slate-800/40 hover:bg-slate-800/80 border border-slate-700/80 hover:border-indigo-500/50 rounded-2xl p-6 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-indigo-500/10 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">1. Hiệu Ứng Đèn Kéo Quân (Bài 23)</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            Mô phỏng đèn kéo quân 3D với 6 hình ảnh từ thư mục <code class="text-indigo-300">images/</code>. Đưa chuột vào hình sẽ tạm dừng, rê chuột ra tiếp tục quay.
+                        </p>
+                    </div>
+                    <div class="flex items-center text-indigo-400 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+                        <span>Trải nghiệm ngay</span>
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+
+                <div onclick="switchView('assignment22')" class="group bg-slate-800/40 hover:bg-slate-800/80 border border-slate-700/80 hover:border-pink-500/50 rounded-2xl p-6 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-pink-500/10 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-images"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-pink-300 transition-colors">2. Kết Quả Bài Tập 22</h3>
+                        <p class="text-slate-400 text-sm mb-4">
+                            Hiển thị bộ sưu tập hình ảnh kết quả từ bài tập trước lấy từ thư mục <code class="text-pink-300">images/</code>.
+                        </p>
+                    </div>
+                    <div class="flex items-center text-pink-400 font-semibold text-sm group-hover:translate-x-1 transition-transform">
+                        <span>Xem kết quả</span>
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deployment Guide Section -->
+            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-white mb-3 flex items-center">
+                    <i class="fa-solid fa-cloud-arrow-up text-indigo-400 mr-2"></i> Hướng Dẫn Deploy Lên Netlify
+                </h3>
+                <ol class="list-decimal list-inside space-y-2 text-sm text-slate-300">
+                    <li>Vào <a href="https://app.netlify.com" target="_blank" class="text-indigo-400 underline hover:text-indigo-300">Netlify Dashboard</a> → Chọn <span class="font-semibold text-white">Add new site</span> → <span class="font-semibold text-white">Import an existing project</span>.</li>
+                    <li>Kết nối với GitHub và chọn repository chứa mã nguồn bài tập.</li>
+                    <li>Cấu hình build: <span class="font-mono bg-slate-900 px-2 py-0.5 rounded text-indigo-300">Build command: để trống</span>, <span class="font-mono bg-slate-900 px-2 py-0.5 rounded text-indigo-300">Publish directory: /</span>.</li>
+                    <li>Bấm <span class="font-semibold text-white">Deploy site</span> để nhận link trực tuyến dạng <code class="text-pink-400">ten-site.netlify.app</code>.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- VIEW 2: LANTERN (Đèn Kéo Quân - 6 ảnh từ thư mục images/) -->
+        <div id="lanternView" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-800/60 border border-slate-700/80 p-4 rounded-2xl">
+                <button onclick="switchView('home')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-sm font-medium transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Trở Về Trang Chủ</span>
+                </button>
+                <div class="text-center">
+                    <h2 class="text-xl font-bold text-white">Hiệu Ứng Đèn Kéo Quân 3D</h2>
+                    <p class="text-xs text-slate-400">Đưa chuột vào hình để dừng quay, rê chuột ra để tiếp tục</p>
+                </div>
+                <div class="bg-indigo-600/20 border border-indigo-500/30 px-3.5 py-1.5 rounded-xl text-xs font-mono text-indigo-300 flex items-center space-x-2 shadow-inner">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Mã SV: 231A010673</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/40 border border-slate-700 rounded-3xl p-8 relative flex flex-col items-center justify-center min-h-[550px] shadow-2xl overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/50 via-transparent to-indigo-950/30 pointer-events-none"></div>
+
+                <div class="relative py-12">
+                    <div class="lantern-roof"></div>
+
+                    <!-- Scene with 6 faces using images/ folder -->
+                    <div class="scene">
+                        <div class="carousel" id="carousel">
+                            <!-- Face 1 -->
+                            <div class="carousel_face_wrapper" onmouseenter="pauseRotation()" onmouseleave="resumeRotation()">
+                                <div class="carousel__face">
+                                    <img src="images/jinhsi.jpg" alt="Ảnh 1">
+                                    <div class="p-2 text-center w-full bg-slate-900/10 backdrop-blur-sm">
+                                        <p class="text-xs font-bold text-slate-800">Ảnh 1</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Face 2 -->
+                            <div class="carousel_face_wrapper" onmouseenter="pauseRotation()" onmouseleave="resumeRotation()">
+                                <div class="carousel__face">
+                                    <img src="images/Galbrena.jpg" alt="Ảnh 2">
+                                    <div class="p-2 text-center w-full bg-slate-900/10 backdrop-blur-sm">
+                                        <p class="text-xs font-bold text-slate-800">Ảnh 2</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Face 3 -->
+                            <div class="carousel_face_wrapper" onmouseenter="pauseRotation()" onmouseleave="resumeRotation()">
+                                <div class="carousel__face">
+                                    <img src="images/Phrolova.jpg" alt="Ảnh 3">
+                                    <div class="p-2 text-center w-full bg-slate-900/10 backdrop-blur-sm">
+                                        <p class="text-xs font-bold text-slate-800">Ảnh 3</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Face 4 -->
+                            <div class="carousel_face_wrapper" onmouseenter="pauseRotation()" onmouseleave="resumeRotation()">
+                                <div class="carousel__face">
+                                    <img src="images/jinhsi.jpg" alt="Ảnh 4">
+                                    <div class="p-2 text-center w-full bg-slate-900/10 backdrop-blur-sm">
+                                        <p class="text-xs font-bold text-slate-800">Ảnh 4</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Face 5 -->
+                            <div class="carousel_face_wrapper" onmouseenter="pauseRotation()" onmouseleave="resumeRotation()">
+                                <div class="carousel__face">
+                                    <img src="images/Galbrena.jpg" alt="Ảnh 5">
+                                    <div class="p-2 text-center w-full bg-slate-900/10 backdrop-blur-sm">
+                                        <p class="text-xs font-bold text-slate-800">Ảnh 5</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Face 6 -->
+                            <div class="carousel_face_wrapper" onmouseenter="pauseRotation()" onmouseleave="resumeRotation()">
+                                <div class="carousel__face">
+                                    <img src="images/Phrolova.jpg" alt="Ảnh 6">
+                                    <div class="p-2 text-center w-full bg-slate-900/10 backdrop-blur-sm">
+                                        <p class="text-xs font-bold text-slate-800">Ảnh 6</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lantern-base"></div>
+                </div>
+
+                <div class="mt-6 flex flex-wrap items-center justify-center gap-4 z-10">
+                    <button id="toggleBtn" onclick="toggleRotation()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-indigo-600/30 transition-all flex items-center space-x-2">
+                        <i id="toggleIcon" class="fa-solid fa-pause"></i>
+                        <span id="toggleText">Tạm Dừng Đèn</span>
+                    </button>
+                    <div class="px-4 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-xs text-slate-300 flex items-center space-x-2">
+                        <i class="fa-solid fa-info-circle text-indigo-400"></i>
+                        <span id="statusText">Trạng thái: Đang quay vòng tròn</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: ASSIGNMENT  -->
+        <div id="assignment22View" class="hidden space-y-6">
+            <div class="flex items-center justify-between bg-slate-800/60 border border-slate-700/80 p-4 rounded-2xl">
+                <button onclick="switchView('home')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-sm font-medium transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Trở Về Trang Chủ</span>
+                </button>
+                <div class="text-center">
+                    <h2 class="text-xl font-bold text-white">Kết Quả Bài Tập</h2>
+                    <p class="text-xs text-slate-400">Bộ sưu tập hình ảnh từ thư mục images/</p>
+                </div>
+                <div class="bg-pink-600/20 border border-pink-500/30 px-3.5 py-1.5 rounded-xl text-xs font-mono text-pink-300 flex items-center space-x-2">
+                    <span>Mã SV: 231A010673</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-800/40 border border-slate-700 rounded-2xl overflow-hidden shadow-lg">
+                    <img src="images/banner.jpg" class="w-full h-48 object-cover" alt="Bài tập - Hình 1">
+                    <div class="p-4 space-y-2">
+                        <h4 class="font-bold text-white">Thành phần Giao diện 1</h4>
+                        <p class="text-xs text-slate-400">Kết quả triển khai bố cục CSS Grid và Flexbox tiêu chuẩn.</p>
+                    </div>
+                </div>
+                <div class="bg-slate-800/40 border border-slate-700 rounded-2xl overflow-hidden shadow-lg">
+                    <img src="images/banner2.jpg" class="w-full h-48 object-cover" alt="Bài tập - Hình 2">
+                    <div class="p-4 space-y-2">
+                        <h4 class="font-bold text-white">Thành phần Giao diện 2</h4>
+                        <p class="text-xs text-slate-400">Tích hợp tương tác sự kiện JavaScript xử lý DOM linh hoạt.</p>
+                    </div>
+                </div>
+                <div class="bg-slate-800/40 border border-slate-700 rounded-2xl overflow-hidden shadow-lg">
+                    <img src="images/banner3.jpg" class="w-full h-48 object-cover" alt="Bài tập - Hình 3">
+                    <div class="p-4 space-y-2">
+                        <h4 class="font-bold text-white">Thành phần Giao diện 3</h4>
+                        <p class="text-xs text-slate-400">Responsive trên mọi thiết bị di động và máy tính bảng.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900/90 border-t border-slate-800 py-6 mt-12 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>Bài tập 23 - Web có hiệu ứng Javascript (Đèn kéo quân) | Sinh viên thực hiện: Nguyễn Triệu Nhân - Mã SV: <span class="text-indigo-400 font-mono font-semibold">231A010673</span></p>
+            <p class="text-slate-500">Deploy sẵn sàng cho Netlify static hosting.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function switchView(viewName) {
+            const homeView = document.getElementById('homeView');
+            const lanternView = document.getElementById('lanternView');
+            const a22View = document.getElementById('assignment22View');
+
+            const navHome = document.getElementById('navHomeBtn');
+            const navLantern = document.getElementById('navLanternBtn');
+            const navB22 = document.getElementById('navB22Btn');
+
+            homeView.classList.add('hidden');
+            lanternView.classList.add('hidden');
+            a22View.classList.add('hidden');
+
+            [navHome, navLantern, navB22].forEach(btn => {
+                btn.className = "px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:bg-slate-800 hover:text-white";
+            });
+
+            if (viewName === 'home') {
+                homeView.classList.remove('hidden');
+                navHome.className = "px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30";
+            } else if (viewName === 'lantern') {
+                lanternView.classList.remove('hidden');
+                navLantern.className = "px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30";
+            } else if (viewName === 'assignment22') {
+                a22View.classList.remove('hidden');
+                navB22.className = "px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30";
+            }
+        }
+
+        const carousel = document.getElementById('carousel');
+        const faces = document.querySelectorAll('.carousel__face');
+        const numFaces = faces.length;
+        const radius = 280; 
+        let angleStep = 360 / numFaces;
+
+        faces.forEach((face, index) => {
+            let angle = angleStep * index;
+            face.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+        });
+
+        let currentAngle = 0;
+        let isPaused = false;
+        let rotationSpeed = 0.4;
+
+        function rotateLantern() {
+            if (!isPaused) {
+                currentAngle -= rotationSpeed;
+                carousel.style.transform = `rotateY(${currentAngle}deg)`;
+            }
+            requestAnimationFrame(rotateLantern);
+        }
+
+        function pauseRotation() {
+            isPaused = true;
+            document.getElementById('statusText').innerText = "Trạng thái: Đã dừng (Do đưa chuột vào hình)";
+            document.getElementById('toggleIcon').className = "fa-solid fa-play";
+            document.getElementById('toggleText').innerText = "Tiếp Tục Đèn";
+        }
+
+        function resumeRotation() {
+            isPaused = false;
+            document.getElementById('statusText').innerText = "Trạng thái: Đang quay vòng tròn";
+            document.getElementById('toggleIcon').className = "fa-solid fa-pause";
+            document.getElementById('toggleText').innerText = "Tạm Dừng Đèn";
+        }
+
+        function toggleRotation() {
+            isPaused = !isPaused;
+            if (isPaused) {
+                document.getElementById('statusText').innerText = "Trạng thái: Đã tạm dừng thủ công";
+                document.getElementById('toggleIcon').className = "fa-solid fa-play";
+                document.getElementById('toggleText').innerText = "Tiếp Tục Đèn";
+            } else {
+                document.getElementById('statusText').innerText = "Trạng thái: Đang quay vòng tròn";
+                document.getElementById('toggleIcon').className = "fa-solid fa-pause";
+                document.getElementById('toggleText').innerText = "Tạm Dừng Đèn";
+            }
+        }
+
+        window.onload = function() {
+            requestAnimationFrame(rotateLantern);
+        };
+    </script>
+</body>
+</html>
